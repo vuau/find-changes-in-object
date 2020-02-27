@@ -11,8 +11,9 @@
   "browser": "dist/find-changes-in-object.umd.js",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "rollup -c -m -w",
     "test": "node test/test.js",
+    "debug-test": "node --inspect-brk test/test.js",
     "pretest": "npm run build"
   },
   "files": [

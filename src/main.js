@@ -1,55 +1,45 @@
-import without from 'lodash/without'
-import intersection from 'lodash/intersection'
-import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 import isPlainObject from 'lodash/isPlainObject'
+import transform from 'lodash/transform'
 
 /**
  * Compare two objects and and return changes
- * @param  {Object} first object
- * @param  {Object} second object
+ * @param  {Object} original object
+ * @param  {Object} updated object
  * @return {Object} changes
  */
 
-function findChangesInObject (a, b) {
-  if (a == null || typeof a !== 'object' || b == null || typeof b !== 'object') {
+function findChangesInObject (origin, updated) {
+  if (
+    origin == null ||
+    typeof origin !== 'object' ||
+    updated == null ||
+    typeof updated !== 'object'
+  ) {
     return {}
   }
-  const keysA = Object.keys(a)
-  const keysB = Object.keys(b)
-  const keysBNotInA = without(keysB, ...keysA)
-  const keysANotInB = without(keysA, ...keysB)
-  const keysInBoth = intersection(keysA, keysB)
-
-  const keysAdded = {}
-  for (const key of keysBNotInA) {
-    keysAdded[key] = b[key]
-  }
-
-  const keysRemoved = {}
-  for (const key of keysANotInB) {
-    keysRemoved[key] = null
-  }
-
-  const keysUpdated = {}
-  for (const key of keysInBoth) {
-    if (typeof a[key] !== typeof b[key]) {
-      keysUpdated[key] = b[key]
-    } else if (isPlainObject(a[key])) {
-      const changes = findChangesInObject(a[key], b[key])
-      if (!isEmpty(changes)) {
-        keysUpdated[key] = changes
-      }
-    } else if (!isEqual(a[key], b[key])) {
-      keysUpdated[key] = b[key]
+  const changes = {}
+  Object.keys(origin).forEach(key => {
+    if (updated[key] === undefined) {
+      // key is removed
+      changes[key] = null
     }
-  }
-
-  return {
-    ...keysAdded,
-    ...keysRemoved,
-    ...keysUpdated
-  }
+  })
+  return transform(
+    updated,
+    (changes, value, key) => {
+      if (origin[key] === undefined) {
+        // key is added
+        changes[key] = value
+      } else if (!isEqual(value, origin[key])) {
+        changes[key] =
+          isPlainObject(value) && isPlainObject(origin[key])
+            ? findChangesInObject(origin[key], value)
+            : value
+      }
+    },
+    changes
+  )
 }
 
 export default findChangesInObject

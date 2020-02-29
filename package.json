@@ -1,6 +1,6 @@
 {
   "name": "find-changes-in-object",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Find what makes an object changes",
   "repository": {
     "type": "git",

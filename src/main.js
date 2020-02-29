@@ -16,7 +16,7 @@ function findChangesInObject (origin, updated) {
     updated == null ||
     typeof updated !== 'object'
   ) {
-    return {}
+    return null
   }
   const changes = {}
   Object.keys(origin).forEach(key => {

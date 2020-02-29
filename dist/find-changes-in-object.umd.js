@@ -3153,7 +3153,7 @@
 
   function findChangesInObject(origin, updated) {
     if (origin == null || _typeof(origin) !== 'object' || updated == null || _typeof(updated) !== 'object') {
-      return {};
+      return null;
     }
 
     var changes = {};

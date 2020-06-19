@@ -20,7 +20,7 @@ function findChangesInObject (origin, updated) {
   }
   const changes = {}
   Object.keys(origin).forEach(key => {
-    if (updated[key] === undefined) {
+    if (origin[key] && updated[key] === undefined) {
       // key is removed
       changes[key] = null
     }
@@ -28,7 +28,7 @@ function findChangesInObject (origin, updated) {
   return transform(
     updated,
     (changes, value, key) => {
-      if (origin[key] === undefined) {
+      if (origin[key] === undefined && value) {
         // key is added
         changes[key] = value
       } else if (!isEqual(value, origin[key])) {

@@ -10,6 +10,9 @@ describe('Find changes in objects', function() {
   })
   it('return {} if inputs are equal', function() {
     expect(findChangesInObject({}, {})).to.deep.equal({})
+    expect(findChangesInObject({a: undefined}, {a: undefined})).to.deep.equal({})
+    expect(findChangesInObject({a: undefined}, {})).to.deep.equal({})
+    expect(findChangesInObject({}, { a: undefined })).to.deep.equal({})
   })
   it('return changes when adding props', function() {
     expect(findChangesInObject({}, { a: 1 }), 'number').to.deep.equal({

@@ -3158,13 +3158,13 @@
 
     var changes = {};
     Object.keys(origin).forEach(function (key) {
-      if (updated[key] === undefined) {
+      if (origin[key] && updated[key] === undefined) {
         // key is removed
         changes[key] = null;
       }
     });
     return transform_1(updated, function (changes, value, key) {
-      if (origin[key] === undefined) {
+      if (origin[key] === undefined && value) {
         // key is added
         changes[key] = value;
       } else if (!isEqual_1(value, origin[key])) {
